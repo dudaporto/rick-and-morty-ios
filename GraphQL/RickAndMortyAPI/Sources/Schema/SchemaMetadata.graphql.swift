@@ -24,8 +24,8 @@ public enum SchemaMetadata: ApolloAPI.SchemaMetadata {
     switch typename {
     case "Query": return RickAndMortyAPI.Objects.Query
     case "Characters": return RickAndMortyAPI.Objects.Characters
-    case "Info": return RickAndMortyAPI.Objects.Info
     case "Character": return RickAndMortyAPI.Objects.Character
+    case "Location": return RickAndMortyAPI.Objects.Location
     default: return nil
     }
   }

@@ -4,8 +4,8 @@
 import ApolloAPI
 
 public extension Objects {
-  static let Info = ApolloAPI.Object(
-    typename: "Info",
+  static let Location = ApolloAPI.Object(
+    typename: "Location",
     implementedInterfaces: []
   )
 }

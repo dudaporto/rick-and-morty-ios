@@ -1,10 +1,11 @@
 query CharacterList {
   characters(page: 1, filter: { name: "" }) {
-    info {
-      count
-    }
     results {
       name
+      location {
+        name
+      }
+      status
     }
   }
 }
