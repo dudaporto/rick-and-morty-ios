@@ -7,16 +7,24 @@ public class CharacterListQuery: GraphQLQuery {
   public static let operationName: String = "CharacterList"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query CharacterList($search: String) { characters(page: 1, filter: { name: $search }) { __typename results { __typename name image location { __typename name } status } } }"#
+      #"query CharacterList($page: Int, $search: String) { characters(page: $page, filter: { name: $search }) { __typename info { __typename next } results { __typename name image location { __typename name } status } } }"#
     ))
 
+  public var page: GraphQLNullable<Int>
   public var search: GraphQLNullable<String>
 
-  public init(search: GraphQLNullable<String>) {
+  public init(
+    page: GraphQLNullable<Int>,
+    search: GraphQLNullable<String>
+  ) {
+    self.page = page
     self.search = search
   }
 
-  public var __variables: Variables? { ["search": search] }
+  public var __variables: Variables? { [
+    "page": page,
+    "search": search
+  ] }
 
   public struct Data: RickAndMortyAPI.SelectionSet {
     public let __data: DataDict
@@ -25,7 +33,7 @@ public class CharacterListQuery: GraphQLQuery {
     public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Query }
     public static var __selections: [ApolloAPI.Selection] { [
       .field("characters", Characters?.self, arguments: [
-        "page": 1,
+        "page": .variable("page"),
         "filter": ["name": .variable("search")]
       ]),
     ] }
@@ -43,10 +51,29 @@ public class CharacterListQuery: GraphQLQuery {
       public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Characters }
       public static var __selections: [ApolloAPI.Selection] { [
         .field("__typename", String.self),
+        .field("info", Info?.self),
         .field("results", [Result?]?.self),
       ] }
 
+      public var info: Info? { __data["info"] }
       public var results: [Result?]? { __data["results"] }
+
+      /// Characters.Info
+      ///
+      /// Parent Type: `Info`
+      public struct Info: RickAndMortyAPI.SelectionSet {
+        public let __data: DataDict
+        public init(_dataDict: DataDict) { __data = _dataDict }
+
+        public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Info }
+        public static var __selections: [ApolloAPI.Selection] { [
+          .field("__typename", String.self),
+          .field("next", Int?.self),
+        ] }
+
+        /// Number of the next page (if it exists)
+        public var next: Int? { __data["next"] }
+      }
 
       /// Characters.Result
       ///

@@ -13,6 +13,8 @@ internal enum Strings {
   internal enum CharacterList {
     /// Which character are you looking for?
     internal static let searchBarPlaceholder = Strings.tr("Localizable", "characterList.searchBarPlaceholder", fallback: "Which character are you looking for?")
+    /// See more characters
+    internal static let seeMoreCharacters = Strings.tr("Localizable", "characterList.seeMoreCharacters", fallback: "See more characters")
     /// Search for Rick & Morty character by name
     internal static let subtitle = Strings.tr("Localizable", "characterList.subtitle", fallback: "Search for Rick & Morty character by name")
     /// Characters

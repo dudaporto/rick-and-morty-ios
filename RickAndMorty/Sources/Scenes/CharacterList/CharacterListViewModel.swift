@@ -3,6 +3,7 @@ import Foundation
 protocol CharacterListViewModelProtocol {
     func loadContent()
     func didSearch(_ name: String)
+    func loadMore()
 }
 
 final class CharacterListViewModel {
@@ -12,37 +13,24 @@ final class CharacterListViewModel {
     private let adapter = CharacterListAdapter()
     
     private var searchTimer: Timer?
+    private var currentPage = 1
+    private var search = ""
     
     init(useCase: CharacterListUseCaseProtocol = CharacterListUseCase()) {
         self.useCase = useCase
     }
-    
-    // Debounce search
-    func didSearch(_ name: String) {
-        searchTimer?.invalidate()
-        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
-            self?.fetchCharacters(search: name)
-        }
-    }
-    
-    func clearList() {
-        adapter.characters = []
-        view?.displayCharacters(adapter: adapter)
-    }
-    
-    func loadContent() {
-        fetchCharacters(search: "")
-    }
 }
 
 private extension CharacterListViewModel {
-    func fetchCharacters(search: String) {
-        clearList()
-        view?.startLoading()
+    func fetchCharacters(isLoadingMore: Bool = false) {
+        if !isLoadingMore {
+            view?.startLoading()
+        }
         
-        useCase.fetchCharacters(search: search) { [weak self] response in
+        useCase.fetchCharacters(page: currentPage, search: search) { [weak self] response in
             guard let self else { return }
-            self.adapter.characters = response.characters
+            
+            self.setupAdapter(response: response)
             self.view?.stopLoading()
             self.view?.displayCharacters(adapter: self.adapter)
             
@@ -50,8 +38,39 @@ private extension CharacterListViewModel {
             print("Erro")
         }
     }
+    
+    func clearList() {
+        currentPage = 1
+        search = ""
+        adapter.characters = []
+        adapter.showSeeMore = false
+        view?.displayCharacters(adapter: adapter)
+    }
+    
+    func setupAdapter(response: CharacterListResponse) {
+        adapter.characters.append(contentsOf: response.characters)
+        adapter.showSeeMore = response.nextPage != nil
+    }
 }
 
 extension CharacterListViewModel: CharacterListViewModelProtocol {
+    // Debounce search
+    func didSearch(_ name: String) {
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.clearList()
+            self?.search = name
+            self?.fetchCharacters()
+        }
+    }
     
+    func loadContent() {
+        clearList()
+        fetchCharacters()
+    }
+    
+    func loadMore() {
+        currentPage += 1
+        fetchCharacters(isLoadingMore: true)
+    }
 }

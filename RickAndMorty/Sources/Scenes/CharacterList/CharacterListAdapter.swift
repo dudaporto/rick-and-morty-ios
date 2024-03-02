@@ -7,6 +7,7 @@ final class CharacterListAdapter: NSObject, UITableViewDataSource {
     }
     
     var characters: [CharacterListResponse.Character] = []
+    var showSeeMore = false
     
     func numberOfSections(in tableView: UITableView) -> Int {
         Section.allCases.count
@@ -19,7 +20,7 @@ final class CharacterListAdapter: NSObject, UITableViewDataSource {
         case .characters:
             return characters.count
         case .seeMore:
-            return 1
+            return showSeeMore ? 1 : 0
         }
     }
     
@@ -30,7 +31,7 @@ final class CharacterListAdapter: NSObject, UITableViewDataSource {
         case .characters:
             return characterCell(for: indexPath, tableView: tableView)
         case .seeMore:
-            return UITableViewCell()
+            return SeeMoreCell()
         }
     }
 }

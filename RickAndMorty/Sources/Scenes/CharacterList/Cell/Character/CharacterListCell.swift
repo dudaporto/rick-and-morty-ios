@@ -32,7 +32,7 @@ final class CharacterListCell: UITableViewCell {
         return image
     }()
     
-    private lazy var nameLabel = UILabel.build(type: .highlightSecondaryTitle, color: Color.gray4.color)
+    private lazy var nameLabel = UILabel.build(type: .highlightSecondaryTitle, color: Color.gray4.color, numberOfLines: 1)
     
     private lazy var statusIndicator: UIView = {
         let cicledView = UIView()
@@ -147,6 +147,7 @@ extension CharacterListCell: ViewSetup {
         
         backgroundColor = Color.background.color
         selectionStyle = .none
+        nameLabel.adjustsFontSizeToFitWidth = true
     }
 }
 

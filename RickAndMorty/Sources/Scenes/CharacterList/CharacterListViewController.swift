@@ -35,21 +35,23 @@ final class CharacterListViewController: UIViewController {
         let stack = UIStackView(arrangedSubviews: [subtitleLabel, searchField])
         stack.axis = .vertical
         stack.spacing = Spacing.space2
-        stack.isLayoutMarginsRelativeArrangement = true
-        stack.layoutMargins = Constants.Insets.header
         return stack
+    }()
+    
+    private lazy var headerView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
+        return view
     }()
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
-//        tableView.delegate = self
+        tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.register(CharacterListCell.self, forCellReuseIdentifier: CharacterListCell.identifier)
         tableView.backgroundColor = .clear
         tableView.showsVerticalScrollIndicator = false
-        tableView.isHidden = true
         tableView.keyboardDismissMode = .onDrag
-        tableView.tableHeaderView = headerStackView
         tableView.sectionHeaderHeight = .zero
         tableView.sectionFooterHeight = .zero
         return tableView
@@ -61,9 +63,19 @@ final class CharacterListViewController: UIViewController {
         return loading
     }()
     
+    private let viewModel: CharacterListViewModelProtocol
+    
+    init(viewModel: CharacterListViewModelProtocol) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { nil }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateHeaderViewHeight(for: tableView.tableHeaderView)
+        updateHeader()
     }
     
     override func viewDidLoad() {
@@ -78,29 +90,14 @@ final class CharacterListViewController: UIViewController {
         setupNavigationBar()
     }
     
-    private let viewModel: CharacterListViewModelProtocol
-    
-    init(viewModel: CharacterListViewModelProtocol) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) { nil }
-    
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        navigationController?.navigationBar.barStyle = .default
-        navigationController?.navigationBar.tintColor = Color.green1.color
-        navigationController?.navigationBar.shadowImage = nil
-        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
-        navigationItem.largeTitleDisplayMode = .always
     }
     
-    private func updateHeaderViewHeight(for header: UIView?) {
-        guard let header = header else { return }
-        let width = view.bounds.width - Spacing.space5
-        header.frame.size.height = header.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
+    private func updateHeader() {
+        let width = tableView.frame.width
+        headerView.frame.size.height = headerView.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
+        tableView.tableHeaderView = headerView
     }
 }
 
@@ -109,9 +106,11 @@ extension CharacterListViewController: ViewSetup {
     func setupConstraints() {
         tableView.fitToParent(with: Constants.Insets.tableView)
         loadingView.fitToParent()
+        headerStackView.fitToParent(with: Constants.Insets.header)
     }
     
     func setupHierarchy() {
+        headerView.addSubview(headerStackView)
         view.addSubviews(tableView, loadingView)
     }
     
@@ -121,28 +120,31 @@ extension CharacterListViewController: ViewSetup {
 }
 
 // MARK: - UITableViewDelegate
-//extension CharacterListViewController: UITableViewDelegate {
-//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        switch Section(rawValue: indexPath.section) {
-//        case .characters:
-//            viewModel.didSelectCharacter(at: indexPath.row)
-//
-//        default:
-//            break
-//        }
-//    }
-//
-//    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//        UITableView.automaticDimension
-//    }
-//}
+extension CharacterListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        switch CharacterListAdapter.Section(rawValue: indexPath.section) {
+        case .characters:
+            print("didselect character")
+
+        case .seeMore:
+            let cell = tableView.cellForRow(at: indexPath) as? SeeMoreCell
+            cell?.startLoading()
+            viewModel.loadMore()
+            
+        case .none:
+            break
+        }
+    }
+}
 
 // MARK: - CharacterListViewProtocol
 extension CharacterListViewController: CharacterListViewProtocol {
     func displayCharacters(adapter: CharacterListAdapter) {
         tableView.dataSource = adapter
-        tableView.reloadData()
-        tableView.isHidden = false
+        
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            self.tableView.reloadData()
+        }
     }
     
     func startLoading() {

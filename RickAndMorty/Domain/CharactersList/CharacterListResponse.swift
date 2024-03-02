@@ -2,10 +2,12 @@ import RickAndMortyAPI
 
 struct CharacterListResponse {
     let characters: [Character]
+    let nextPage: Int?
     
     init?(data: CharacterListQuery.Data.Characters?) {
         guard let results = data?.results else { return nil }
         self.characters = results.compactMap { Character(data: $0) }
+        self.nextPage = data?.info?.next
     }
     
     struct Character {
