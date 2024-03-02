@@ -1,5 +1,13 @@
 input_dir: RickAndMorty/Sources
 output_dir: RickAndMorty/Sources/Generated/
+strings:
+  inputs: Localizable/Localizable.strings
+  outputs:
+    templateName: structured-swift5
+    output: Strings.swift
+    params: 
+      publicAccess: false
+      enumName: "Strings"
 xcassets:
   - inputs: DesignSystem/Assets/ColorSet.xcassets
     outputs:

@@ -56,7 +56,11 @@ final class CharacterListCell: UITableViewCell {
         return stackView
     }()
     
-    private lazy var lastLocationTitle = UILabel.build(type: .highlightTertiaryTitle, color: Color.gray4.color)
+    private lazy var lastLocationTitle = UILabel.build(
+        type: .highlightTertiaryTitle,
+        color: Color.gray4.color,
+        text: Strings.CharacterList.CharacterCell.lastKnownLocation
+    )
     private lazy var lastLocationLabel = UILabel.build(type: .caption, color: Color.gray3.color)
     
     private lazy var locationStackView: UIStackView = {
