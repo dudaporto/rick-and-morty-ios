@@ -1,0 +1,15 @@
+input_dir: RickAndMorty/Sources
+output_dir: RickAndMorty/Sources/Generated/
+xcassets:
+  - inputs: DesignSystem/Assets/ColorSet.xcassets
+    outputs:
+      - templateName: swift5
+        output: ColorSet.swift
+        params:
+          enumName: Color
+  - inputs: DesignSystem/Assets/ImageSet.xcassets
+    outputs:
+      - templateName: swift5
+        output: ImageSet.swift
+        params:
+          enumName: Image
