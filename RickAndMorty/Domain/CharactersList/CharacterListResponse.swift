@@ -12,6 +12,7 @@ struct CharacterListResponse {
         let name: String
         let location: String
         let status: Status
+        let imageUrl: String?
         
         init?(data: CharacterListQuery.Data.Characters.Result?) {
             guard let name = data?.name,
@@ -23,6 +24,7 @@ struct CharacterListResponse {
             self.name = name
             self.location = location
             self.status = status
+            self.imageUrl = data?.image
         }
         
         @frozen

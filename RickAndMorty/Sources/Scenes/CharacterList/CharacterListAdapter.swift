@@ -43,9 +43,13 @@ private extension CharacterListAdapter {
             return UITableViewCell()
         }
 
-        let viewModel = CharacterListCellViewModel(character: characters[indexPath.row])
+        let character = characters[indexPath.row]
+        let viewModel = CharacterListCellViewModel(character: character)
         characterCell.setup(with: viewModel)
-//        viewModel.loadImage(for: characterCell, at: indexPath.row)
+        
+        if let imageUrl = character.imageUrl {
+            ImageRepository.shared.load(for: characterCell, imageUrlPath: imageUrl)
+        }
         return cell
     }
 }

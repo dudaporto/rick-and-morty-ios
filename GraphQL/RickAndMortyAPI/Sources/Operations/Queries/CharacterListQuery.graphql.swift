@@ -7,7 +7,7 @@ public class CharacterListQuery: GraphQLQuery {
   public static let operationName: String = "CharacterList"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query CharacterList { characters(page: 1, filter: { name: "" }) { __typename results { __typename name location { __typename name } status } } }"#
+      #"query CharacterList { characters(page: 1, filter: { name: "" }) { __typename results { __typename name image location { __typename name } status } } }"#
     ))
 
   public init() {}
@@ -53,12 +53,16 @@ public class CharacterListQuery: GraphQLQuery {
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
           .field("name", String?.self),
+          .field("image", String?.self),
           .field("location", Location?.self),
           .field("status", String?.self),
         ] }
 
         /// The name of the character.
         public var name: String? { __data["name"] }
+        /// Link to the character's image.
+        /// All images are 300x300px and most are medium shots or portraits since they are intended to be used as avatars.
+        public var image: String? { __data["image"] }
         /// The character's last known location
         public var location: Location? { __data["location"] }
         /// The status of the character ('Alive', 'Dead' or 'unknown').

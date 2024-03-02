@@ -19,9 +19,7 @@ extension CharacterListCell.Constants {
 final class CharacterListCell: UITableViewCell {
     fileprivate enum Constants { }
     
-//    private typealias Localizable = Strings.CharacterList.CharacterCell
-    
-//    weak var currentDownloadTask: Cancellable?
+    weak var currentDownloadTask: Cancellable?
     
     static var identifier: String { String(describing: Self.self) }
     
@@ -118,7 +116,7 @@ final class CharacterListCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         characterImage.image = Image.characterPlaceholder.image
-//        currentDownloadTask?.cancel()
+        currentDownloadTask?.cancel()
     }
 }
 
@@ -152,8 +150,8 @@ extension CharacterListCell: ViewSetup {
     }
 }
 
-//extension CharacterListCell: ImageReceiver {
-//    func setImage(_ image: UIImage) {
-//        characterImage.image = image
-//    }
-//}
+extension CharacterListCell: ImageReceiver {
+    func setImage(_ image: UIImage) {
+        characterImage.image = image
+    }
+}
