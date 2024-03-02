@@ -1,0 +1,49 @@
+name: RickAndMorty
+fileGroups:
+  - GraphQL
+options:
+  deploymentTarget: 
+    iOS: 14.0
+packages: 
+  Apollo:
+    url: https://github.com/apollographql/apollo-ios.git
+    from: 1.7.0
+  RickAndMortyAPI:
+    path: GraphQL/RickAndMortyAPI
+targets: 
+  RickAndMorty:
+    type: application
+    platform: iOS
+    deploymentTarget: 
+      iOS: 14.0
+    sources: RickAndMorty
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.rickandmorty
+    preBuildScripts:
+      - path: apollo-generate.sh
+        name: Apollo Generate
+    dependencies:
+    - package: Apollo
+      product: Apollo
+    - package: RickAndMortyAPI
+  RickAndMortyTests:
+    type: bundle.unit-test
+    platform: iOS
+    deploymentTarget: 
+      iOS: 14.0
+    sources: RickAndMortyTests
+    dependencies: 
+      - target: RickAndMorty
+
+schemes:
+  RickAndMorty:
+    build: 
+      targets: 
+        RickAndMorty: all
+    test: 
+      targets: 
+        - name: RickAndMortyTests
+          parallelizable: false
+          randomExecutionOrder: true 
+      gatherCoverageData: true
