@@ -15,12 +15,12 @@ final class HomeViewController: UIViewController {
         label.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         label.translatesAutoresizingMaskIntoConstraints = false
         
-        useCase.fetchCharacters { [weak self] response in
-            print(response.characters)
-            self?.label.text = response.characters.first?.name
-        } failure: { [weak self] in
-            print("ERRO")
-            self?.view.backgroundColor = .red
-        }
+//        useCase.fetchCharacters { [weak self] response in
+//            print(response.characters)
+//            self?.label.text = response.characters.first?.name
+//        } failure: { [weak self] in
+//            print("ERRO")
+//            self?.view.backgroundColor = .red
+//        }
     }
 }

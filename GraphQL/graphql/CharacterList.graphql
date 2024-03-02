@@ -1,5 +1,5 @@
-query CharacterList {
-  characters(page: 1, filter: { name: "" }) {
+query CharacterList($search: String) {
+  characters(page: 1, filter: { name: $search}) {
     results {
       name
       image

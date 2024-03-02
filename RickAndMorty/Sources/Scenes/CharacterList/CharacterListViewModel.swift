@@ -1,5 +1,8 @@
+import Foundation
+
 protocol CharacterListViewModelProtocol {
-    func fetchCharacters()
+    func loadContent()
+    func didSearch(_ name: String)
 }
 
 final class CharacterListViewModel {
@@ -8,26 +11,40 @@ final class CharacterListViewModel {
     private let useCase: CharacterListUseCaseProtocol
     private let adapter = CharacterListAdapter()
     
+    private var searchTimer: Timer?
+    
     init(useCase: CharacterListUseCaseProtocol = CharacterListUseCase()) {
         self.useCase = useCase
     }
     
-//    func loadContent(characterName: String?) {
-//        clearList()
-//        viewController?.startLoading()
-//        filter.name = characterName
-//        fetchCharacters()
-//    }
+    // Debounce search
+    func didSearch(_ name: String) {
+        searchTimer?.invalidate()
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.fetchCharacters(search: name)
+        }
+    }
     
-    func fetchCharacters() {
+    func clearList() {
+        adapter.characters = []
+        view?.displayCharacters(adapter: adapter)
+    }
+    
+    func loadContent() {
+        fetchCharacters(search: "")
+    }
+}
+
+private extension CharacterListViewModel {
+    func fetchCharacters(search: String) {
+        clearList()
         view?.startLoading()
         
-        useCase.fetchCharacters { [weak self] response in
+        useCase.fetchCharacters(search: search) { [weak self] response in
             guard let self else { return }
-            
             self.adapter.characters = response.characters
             self.view?.stopLoading()
-            self.view?.displayCharacters(adapter: adapter)
+            self.view?.displayCharacters(adapter: self.adapter)
             
         } failure: {
             print("Erro")

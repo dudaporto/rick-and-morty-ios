@@ -70,7 +70,7 @@ final class CharacterListViewController: UIViewController {
         super.viewDidLoad()
         title = Localizable.title
         buildView()
-        viewModel.fetchCharacters()
+        viewModel.loadContent()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -159,13 +159,13 @@ extension CharacterListViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
         let newText = fieldText.replacingCharacters(in: range, with: string)
-//        viewModel.didChangeSearchName(name: newText)
+        viewModel.didSearch(newText)
         return true
     }
 
     func textFieldShouldClear(_ textField: UITextField) -> Bool {
         textField.text = ""
-//        viewModel.loadContent(characterName: nil)
+        viewModel.loadContent()
         view.endEditing(true)
         return false
     }

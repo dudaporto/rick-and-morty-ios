@@ -2,6 +2,7 @@ import RickAndMortyAPI
 
 protocol CharacterListUseCaseProtocol {
     func fetchCharacters(
+        search: String,
         success: @escaping (CharacterListResponse) -> Void,
         failure: @escaping () -> Void
     )
@@ -15,10 +16,11 @@ final class CharacterListUseCase: CharacterListUseCaseProtocol {
     }
     
     func fetchCharacters(
+        search: String,
         success: @escaping (CharacterListResponse) -> Void,
         failure: @escaping () -> Void
     ) {
-        repository.fetch(query: CharacterListQuery()) { result in
+        repository.fetch(query: CharacterListQuery(search: .some(search))) { result in
             switch result {
             case .success(let graphQLResponse):
                 guard let response = CharacterListResponse(data: graphQLResponse.characters) else {
