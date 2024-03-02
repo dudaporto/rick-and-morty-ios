@@ -6,6 +6,7 @@ extension UILabel {
         label.font = type.font
         label.textColor = color
         label.text = text
+        label.numberOfLines = 0
         return label
     }
 }

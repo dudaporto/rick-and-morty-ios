@@ -3,7 +3,7 @@ import UIKit
 final class HomeViewController: UIViewController {
     private let useCase = CharacterListUseCase()
     
-    private lazy var label = UILabel.build(type: .largeTitle, text: "LargeTitle", color: Color.gray3.color)
+    private lazy var label = UILabel.build(type: .largeTitle, color: Color.gray3.color)
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -11,6 +11,12 @@ import Foundation
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum Strings {
   internal enum CharacterList {
+    /// Which character are you looking for?
+    internal static let searchBarPlaceholder = Strings.tr("Localizable", "characterList.searchBarPlaceholder", fallback: "Which character are you looking for?")
+    /// Search for Rick & Morty character by name
+    internal static let subtitle = Strings.tr("Localizable", "characterList.subtitle", fallback: "Search for Rick & Morty character by name")
+    /// Characters
+    internal static let title = Strings.tr("Localizable", "characterList.title", fallback: "Characters")
     internal enum CharacterCell {
       /// Last known location
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation", fallback: "Last known location")

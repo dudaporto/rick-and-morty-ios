@@ -7,7 +7,7 @@ protocol CharacterListUseCaseProtocol {
     )
 }
 
-final class CharacterListUseCase {
+final class CharacterListUseCase: CharacterListUseCaseProtocol {
     private let repository: RepositoryProtocol
     
     init(repository: RepositoryProtocol = Repository()) {
