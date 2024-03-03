@@ -1,9 +1,11 @@
 import Foundation
+import UIKit
 
 protocol CharacterListViewModelProtocol {
     func loadContent()
     func didSearch(_ name: String)
     func loadMore()
+    func didSelectCharacter(at row: Int)
 }
 
 final class CharacterListViewModel {
@@ -72,5 +74,16 @@ extension CharacterListViewModel: CharacterListViewModelProtocol {
     func loadMore() {
         currentPage += 1
         fetchCharacters(isLoadingMore: true)
+    }
+    
+    func didSelectCharacter(at row: Int) {
+        let character = adapter.characters[row]
+
+        let viewModel = CharacterDetailsViewModel(characterSummary: character)
+        let view = CharacterDetailsViewController(viewModel: viewModel)
+
+        viewModel.view = view
+
+        (self.view as? UIViewController)?.navigationController?.pushViewController(view, animated: true)
     }
 }

@@ -8,7 +8,7 @@ struct CharacterDetailsResponse {
     
     init?(data: CharacterDetailsQuery.Data.Character?) {
         guard let species = data?.species,
-              let gender = Gender(rawValue: data?.species ?? ""),
+              let gender = Gender(rawValue: data?.gender ?? ""),
               let origin = data?.origin?.name else {
             return nil
         }

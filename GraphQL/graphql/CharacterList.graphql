@@ -4,6 +4,7 @@ query CharacterList($page: Int, $search: String) {
       next
     }
     results {
+      id
       name
       image
       location {

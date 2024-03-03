@@ -7,7 +7,7 @@ public class CharacterListQuery: GraphQLQuery {
   public static let operationName: String = "CharacterList"
   public static let operationDocument: ApolloAPI.OperationDocument = .init(
     definition: .init(
-      #"query CharacterList($page: Int, $search: String) { characters(page: $page, filter: { name: $search }) { __typename info { __typename next } results { __typename name image location { __typename name } status } } }"#
+      #"query CharacterList($page: Int, $search: String) { characters(page: $page, filter: { name: $search }) { __typename info { __typename next } results { __typename id name image location { __typename name } status } } }"#
     ))
 
   public var page: GraphQLNullable<Int>
@@ -85,12 +85,15 @@ public class CharacterListQuery: GraphQLQuery {
         public static var __parentType: ApolloAPI.ParentType { RickAndMortyAPI.Objects.Character }
         public static var __selections: [ApolloAPI.Selection] { [
           .field("__typename", String.self),
+          .field("id", RickAndMortyAPI.ID?.self),
           .field("name", String?.self),
           .field("image", String?.self),
           .field("location", Location?.self),
           .field("status", String?.self),
         ] }
 
+        /// The id of the character.
+        public var id: RickAndMortyAPI.ID? { __data["id"] }
         /// The name of the character.
         public var name: String? { __data["name"] }
         /// Link to the character's image.

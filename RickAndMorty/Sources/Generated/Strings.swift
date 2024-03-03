@@ -10,6 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum Strings {
+  internal enum CharacterDetails {
+    /// About
+    internal static let aboutSectionTitle = Strings.tr("Localizable", "characterDetails.aboutSectionTitle", fallback: "About")
+    /// Episodes
+    internal static let episodesSectionTitle = Strings.tr("Localizable", "characterDetails.episodesSectionTitle", fallback: "Episodes")
+    /// Gender:
+    internal static let gender = Strings.tr("Localizable", "characterDetails.gender", fallback: "Gender:")
+    /// Origin:
+    internal static let origin = Strings.tr("Localizable", "characterDetails.origin", fallback: "Origin:")
+    /// Specie:
+    internal static let specie = Strings.tr("Localizable", "characterDetails.specie", fallback: "Specie:")
+  }
   internal enum CharacterList {
     /// Which character are you looking for?
     internal static let searchBarPlaceholder = Strings.tr("Localizable", "characterList.searchBarPlaceholder", fallback: "Which character are you looking for?")

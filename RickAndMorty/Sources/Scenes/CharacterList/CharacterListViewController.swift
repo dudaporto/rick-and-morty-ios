@@ -124,7 +124,7 @@ extension CharacterListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch CharacterListAdapter.Section(rawValue: indexPath.section) {
         case .characters:
-            print("didselect character")
+            viewModel.didSelectCharacter(at: indexPath.row)
 
         case .seeMore:
             let cell = tableView.cellForRow(at: indexPath) as? SeeMoreCell

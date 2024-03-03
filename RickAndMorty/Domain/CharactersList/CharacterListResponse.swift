@@ -11,18 +11,21 @@ struct CharacterListResponse {
     }
     
     struct Character {
+        let id: String
         let name: String
         let location: String
         let status: Status
         let imageUrl: String?
         
         init?(data: CharacterListQuery.Data.Characters.Result?) {
-            guard let name = data?.name,
+            guard let id = data?.id,
+                  let name = data?.name,
                   let location = data?.location?.name,
                   let status = Status(rawValue: data?.status ?? "") else {
                 return nil
             }
             
+            self.id = id
             self.name = name
             self.location = location
             self.status = status

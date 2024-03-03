@@ -4,3 +4,10 @@
 "characterList.searchBarPlaceholder" = "Which character are you looking for?";
 "characterList.characterCell.lastKnownLocation" = "Last known location";
 "characterList.seeMoreCharacters" = "See more characters";
+
+// MARK: - Character Details
+"characterDetails.aboutSectionTitle" = "About";
+"characterDetails.episodesSectionTitle" = "Episodes";
+"characterDetails.specie" = "Specie:";
+"characterDetails.origin" = "Origin:";
+"characterDetails.gender" = "Gender:";

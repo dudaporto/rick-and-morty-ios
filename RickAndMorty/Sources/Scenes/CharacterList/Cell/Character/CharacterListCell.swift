@@ -21,8 +21,6 @@ final class CharacterListCell: UITableViewCell {
     
     weak var currentDownloadTask: Cancellable?
     
-    static var identifier: String { String(describing: Self.self) }
-    
     private lazy var characterImage: UIImageView = {
         let image = UIImageView()
         image.border(radius: Radius.medium)
