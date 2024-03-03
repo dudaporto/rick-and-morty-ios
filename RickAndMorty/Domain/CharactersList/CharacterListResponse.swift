@@ -33,7 +33,7 @@ struct CharacterListResponse {
         enum Status: String {
             case alive = "Alive"
             case dead = "Dead"
-            case unknown = "unknown"
+            case unknown
         }
     }
 }
