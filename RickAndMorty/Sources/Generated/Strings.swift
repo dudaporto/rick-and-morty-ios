@@ -35,6 +35,14 @@ internal enum Strings {
       /// Last known location
       internal static let lastKnownLocation = Strings.tr("Localizable", "characterList.characterCell.lastKnownLocation", fallback: "Last known location")
     }
+    internal enum NotFound {
+      /// Enter a new name to try again
+      internal static let subtitle = Strings.tr("Localizable", "characterList.notFound.subtitle", fallback: "Enter a new name to try again")
+      /// Oops! No results were found for ”%@”
+      internal static func title(_ p1: Any) -> String {
+        return Strings.tr("Localizable", "characterList.notFound.title", String(describing: p1), fallback: "Oops! No results were found for ”%@”")
+      }
+    }
   }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length

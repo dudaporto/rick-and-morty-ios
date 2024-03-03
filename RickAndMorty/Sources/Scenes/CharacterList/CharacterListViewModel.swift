@@ -33,8 +33,7 @@ private extension CharacterListViewModel {
             guard let self else { return }
             
             self.setupAdapter(response: response)
-            self.view?.stopLoading()
-            self.view?.displayCharacters(adapter: self.adapter)
+            self.setupViewResults()
             
         } failure: {
             print("Erro")
@@ -52,6 +51,15 @@ private extension CharacterListViewModel {
     func setupAdapter(response: CharacterListResponse) {
         adapter.characters.append(contentsOf: response.characters)
         adapter.showSeeMore = response.nextPage != nil
+    }
+    
+    func setupViewResults() {
+        view?.stopLoading()
+        view?.displayCharacters(adapter: adapter)
+        
+        if adapter.characters.isEmpty && !search.isEmpty {
+            view?.displaySearchError(name: search)
+        }
     }
 }
 

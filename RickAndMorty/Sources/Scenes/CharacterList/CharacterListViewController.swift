@@ -2,6 +2,7 @@ import UIKit
 
 protocol CharacterListViewProtocol: AnyObject {
     func displayCharacters(adapter: CharacterListAdapter)
+    func displaySearchError(name: String)
     func startLoading()
     func stopLoading()
 }
@@ -63,6 +64,12 @@ final class CharacterListViewController: UIViewController {
         return loading
     }()
     
+    private lazy var notFoundView: CharacterNotFoundView = {
+        let view = CharacterNotFoundView()
+        view.isHidden = true
+        return view
+    }()
+    
     private let viewModel: CharacterListViewModelProtocol
     
     init(viewModel: CharacterListViewModelProtocol) {
@@ -96,8 +103,12 @@ final class CharacterListViewController: UIViewController {
     
     private func updateHeader() {
         let width = tableView.frame.width
-        headerView.frame.size.height = headerView.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
+        let height = headerView.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
+        headerView.frame.size.height = height
         tableView.tableHeaderView = headerView
+        
+        let notFoundViewSpacing = height + view.safeAreaInsets.top
+        notFoundView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: notFoundViewSpacing).isActive = true
     }
 }
 
@@ -107,11 +118,13 @@ extension CharacterListViewController: ViewSetup {
         tableView.fitToParent(with: Constants.Insets.tableView)
         loadingView.fitToParent()
         headerStackView.fitToParent(with: Constants.Insets.header)
+        
+        notFoundView.anchor(leading: tableView.leadingAnchor, trailing: tableView.trailingAnchor)
     }
     
     func setupHierarchy() {
         headerView.addSubview(headerStackView)
-        view.addSubviews(tableView, loadingView)
+        view.addSubviews(tableView, loadingView, notFoundView)
     }
     
     func setupStyles() {
@@ -143,7 +156,16 @@ extension CharacterListViewController: CharacterListViewProtocol {
         tableView.dataSource = adapter
         
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            self.notFoundView.isHidden = true
             self.tableView.reloadData()
+        }
+    }
+    
+    func displaySearchError(name: String) {
+        notFoundView.setup(name: name)
+        
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            self.notFoundView.isHidden = false
         }
     }
     
@@ -160,8 +182,10 @@ extension CharacterListViewController: CharacterListViewProtocol {
 extension CharacterListViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
-        let newText = fieldText.replacingCharacters(in: range, with: string)
-        viewModel.didSearch(newText)
+        let newText = fieldText.replacingCharacters(in: range, with: string).trimmingCharacters(in: .whitespaces)
+        if !newText.isEmpty {
+            viewModel.didSearch(newText)
+        }
         return true
     }
 

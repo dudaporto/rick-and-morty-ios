@@ -4,6 +4,8 @@
 "characterList.searchBarPlaceholder" = "Which character are you looking for?";
 "characterList.characterCell.lastKnownLocation" = "Last known location";
 "characterList.seeMoreCharacters" = "See more characters";
+"characterList.notFound.title" = "Oops! No results were found for ”%@”";
+"characterList.notFound.subtitle" = "Enter a new name to try again";
 
 // MARK: - Character Details
 "characterDetails.aboutSectionTitle" = "About";
