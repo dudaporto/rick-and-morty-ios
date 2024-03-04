@@ -102,7 +102,7 @@ final class HomeViewController: UIViewController {
     }
     
     @objc
-    private func showCharacterList() {
+    func showCharacterList() {
         coordinator.start(event: .characterList)
     }
 }

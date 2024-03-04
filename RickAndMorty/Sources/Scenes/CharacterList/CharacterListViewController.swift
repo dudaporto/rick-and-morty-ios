@@ -164,15 +164,8 @@ extension CharacterListViewController: UITableViewDelegate {
                 return
             }
 
-            UIView.animate(withDuration: 0.2, animations: {
-                cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
-            }) { _ in
-                
-                UIView.animate(withDuration: 0.2) {
-                    cell.transform = .identity
-                } completion: { _ in
-                    self.viewModel.didSelectCharacter(at: indexPath.row)
-                }
+            cell.shrink { [unowned self] _ in
+                self.viewModel.didSelectCharacter(at: indexPath.row)
             }
 
         case .seeMore:

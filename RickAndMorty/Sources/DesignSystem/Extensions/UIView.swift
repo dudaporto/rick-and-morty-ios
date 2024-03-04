@@ -39,4 +39,14 @@ extension UIView {
             animations()
         }
     }
+    
+    func shrink(completion: @escaping ((Bool) -> Void)) {
+        UIView.animate(withDuration: 0.2, animations: { [unowned self] in
+            self.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2,  animations: { [unowned self] in
+                self.transform = .identity
+            }, completion: completion)
+        })
+    }
 }
