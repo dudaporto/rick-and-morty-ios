@@ -1,6 +1,6 @@
 import RickAndMortyAPI
 
-struct CharacterDetailsResponse {
+struct CharacterDetailsResponse: Decodable, Equatable {
     let species: String
     let gender: Gender
     let origin: String
@@ -19,7 +19,7 @@ struct CharacterDetailsResponse {
         self.episodes = data?.episode.compactMap{ $0 }.compactMap{ Episode(data: $0) } ?? []
     }
     
-    struct Episode {
+    struct Episode: Decodable, Equatable {
         let name: String
         let code: String
         
@@ -34,7 +34,7 @@ struct CharacterDetailsResponse {
     }
     
     @frozen
-    enum Gender: String {
+    enum Gender: String, Decodable, Equatable {
         case female = "Female"
         case male = "Male"
         case genderless = "Genderless"

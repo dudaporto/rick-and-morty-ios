@@ -7,15 +7,18 @@ final class CharacterDetailsViewModel {
     
     private let characterSummary: CharacterListResponse.Character
     private let useCase: CharacterDetailsUseCaseProtocol
+    private let imageRepository: ImageRepositoryProtocol
     
     private let adapter = CharacterDetailsAdapter()
     
     init(
         characterSummary: CharacterListResponse.Character,
-        useCase: CharacterDetailsUseCaseProtocol = CharacterDetailsUseCase()
+        useCase: CharacterDetailsUseCaseProtocol = CharacterDetailsUseCase(),
+        imageRepository: ImageRepositoryProtocol = ImageRepository.shared
     ) {
         self.characterSummary = characterSummary
         self.useCase = useCase
+        self.imageRepository = imageRepository
     }
 }
 
@@ -43,6 +46,6 @@ private extension CharacterDetailsViewModel {
         )
         
         guard let view, let imageUrl = characterSummary.imageUrl else { return }
-        ImageRepository.shared.load(for: view, imageUrlPath: imageUrl)
+        imageRepository.load(for: view, imageUrlPath: imageUrl)
     }
 }

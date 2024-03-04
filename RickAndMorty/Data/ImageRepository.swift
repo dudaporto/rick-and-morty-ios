@@ -10,7 +10,11 @@ protocol ImageReceiver: AnyObject {
     func setImage(_ image: UIImage)
 }
 
-final class ImageRepository {
+protocol ImageRepositoryProtocol {
+    func load(for receiver: ImageReceiver, imageUrlPath: String)
+}
+
+final class ImageRepository: ImageRepositoryProtocol {
     static let shared = ImageRepository()
     
     private init() { }

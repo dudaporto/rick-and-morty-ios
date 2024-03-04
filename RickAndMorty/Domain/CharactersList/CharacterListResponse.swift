@@ -1,6 +1,6 @@
 import RickAndMortyAPI
 
-struct CharacterListResponse {
+struct CharacterListResponse: Decodable {
     let characters: [Character]
     let nextPage: Int?
     
@@ -10,7 +10,7 @@ struct CharacterListResponse {
         self.nextPage = data?.info?.next
     }
     
-    struct Character {
+    struct Character: Equatable, Decodable {
         let id: String
         let name: String
         let location: String
@@ -33,7 +33,7 @@ struct CharacterListResponse {
         }
         
         @frozen
-        enum Status: String {
+        enum Status: String, Decodable {
             case alive = "Alive"
             case dead = "Dead"
             case unknown
