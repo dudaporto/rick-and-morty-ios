@@ -3,11 +3,12 @@ import UIKit
 final class CharacterEpisodeCell: UITableViewCell {
     private lazy var episodeLabel = UILabel.build(type: .highlightSecondaryTitle, color: Color.green1.color, numberOfLines: 1)
 
-    private lazy var episodeNameLabel = UILabel.build(type: .title, color: Color.gray2.color, numberOfLines: 1)
+    private lazy var episodeNameLabel = UILabel.build(type: .title, color: Color.gray2.color)
     
     private lazy var rootStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [episodeLabel, episodeNameLabel])
         stackView.spacing = Spacing.space1
+        stackView.alignment = .top
         stackView.isLayoutMarginsRelativeArrangement = true
         stackView.layoutMargins = UIEdgeInsets(inset: Spacing.space3)
         return stackView
