@@ -12,14 +12,16 @@ final class CharacterListViewModel {
     weak var view: CharacterListViewProtocol?
     
     private let useCase: CharacterListUseCaseProtocol
+    private let coordinator: CoordinatorProtocol
     private let adapter = CharacterListAdapter()
     
     private var searchTimer: Timer?
     private var currentPage = 1
     private var search = ""
     
-    init(useCase: CharacterListUseCaseProtocol = CharacterListUseCase()) {
+    init(useCase: CharacterListUseCaseProtocol = CharacterListUseCase(), coordinator: CoordinatorProtocol) {
         self.useCase = useCase
+        self.coordinator = coordinator
     }
 }
 
@@ -92,13 +94,8 @@ extension CharacterListViewModel: CharacterListViewModelProtocol {
     }
     
     func didSelectCharacter(at row: Int) {
+        guard adapter.characters.indices.contains(row) else { return }
         let character = adapter.characters[row]
-
-        let viewModel = CharacterDetailsViewModel(characterSummary: character)
-        let view = CharacterDetailsViewController(viewModel: viewModel)
-
-        viewModel.view = view
-
-        (self.view as? UIViewController)?.navigationController?.pushViewController(view, animated: true)
+        coordinator.start(event: .characterDetails(summary: character))
     }
 }
