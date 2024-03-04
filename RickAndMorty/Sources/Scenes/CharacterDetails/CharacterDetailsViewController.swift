@@ -3,6 +3,7 @@ import UIKit
 protocol CharacterDetailsViewProtocol: AnyObject, ImageReceiver {
     func displayInfo(adapter: CharacterDetailsAdapter)
     func displayHeader(name: String, statusColor: UIColor, statusDescription: String)
+    func displayError()
     func startLoading()
 }
 
@@ -51,7 +52,6 @@ final class CharacterDetailsViewController: UIViewController {
     
     private lazy var infoTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.sectionFooterHeight = .zero
         tableView.backgroundColor = .clear
@@ -62,6 +62,12 @@ final class CharacterDetailsViewController: UIViewController {
         let loading = UIActivityIndicatorView(style: .medium)
         loading.color = Color.green1.color
         return loading
+    }()
+    
+    private lazy var errorView: ErrorView = {
+        let view = ErrorView(delegate: self)
+        view.isHidden = true
+        return view
     }()
     
     private var topBarHeight: CGFloat {
@@ -140,6 +146,12 @@ extension CharacterDetailsViewController: ViewSetup {
                              trailing: characterInfoContainer.trailingAnchor,
                              padding: .init(vertical: Spacing.space2))
         
+        errorView.anchor(top: headerStackView.bottomAnchor,
+                         bottom: characterInfoContainer.bottomAnchor,
+                         leading: characterInfoContainer.leadingAnchor,
+                         trailing: characterInfoContainer.trailingAnchor,
+                         padding: .init(inset: Spacing.space3))
+        
         loadingView.anchor(top: headerStackView.bottomAnchor,
                            bottom: characterInfoContainer.bottomAnchor,
                            leading: characterInfoContainer.leadingAnchor,
@@ -149,7 +161,7 @@ extension CharacterDetailsViewController: ViewSetup {
     }
     
     func setupHierarchy() {
-        view.addSubviews(characterImage, characterInfoContainer, gradientView, loadingView)
+        view.addSubviews(characterImage, characterInfoContainer, gradientView, loadingView, errorView)
         characterInfoContainer.addSubviews(headerStackView, infoTableView)
     }
     
@@ -167,9 +179,10 @@ extension CharacterDetailsViewController {
 extension CharacterDetailsViewController: CharacterDetailsViewProtocol {
     func displayInfo(adapter: CharacterDetailsAdapter) {
         loadingView.stopAnimating()
+        infoTableView.delegate = adapter
         infoTableView.dataSource = adapter
         
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+        view.animate { [unowned self] in
             self.infoTableView.reloadData()
         }
     }
@@ -180,20 +193,23 @@ extension CharacterDetailsViewController: CharacterDetailsViewProtocol {
         statusLabel.text = statusDescription
     }
     
+    func displayError() {
+        loadingView.stopAnimating()
+        view.animate { [unowned self] in
+            self.errorView.isHidden = false
+        }
+    }
+    
     func startLoading() {
         loadingView.startAnimating()
     }
 }
 
-extension CharacterDetailsViewController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let section = CharacterDetailsAdapter.Section(rawValue: section) else { return nil }
-        
-        switch section {
-        case .about:
-            return TitleHeaderView(title: Strings.CharacterDetails.aboutSectionTitle)
-        case .episodes:
-            return TitleHeaderView(title: Strings.CharacterDetails.episodesSectionTitle)
+extension CharacterDetailsViewController: ErrorViewDelegateProtocol {
+    func didTapTryAgain() {
+        view.animate { [unowned self] in
+            self.errorView.isHidden = true
         }
+        viewModel.loadContent()
     }
 }

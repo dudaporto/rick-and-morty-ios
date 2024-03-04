@@ -28,8 +28,8 @@ extension CharacterDetailsViewModel: CharacterDetailsViewModelProtocol {
             guard let self else { return }
             self.adapter.character = response
             self.view?.displayInfo(adapter: self.adapter)
-        } failure: {
-            print("error")
+        } failure: { [weak self] in
+            self?.view?.displayError()
         }
     }
 }

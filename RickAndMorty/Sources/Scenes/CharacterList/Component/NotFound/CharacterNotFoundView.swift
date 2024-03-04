@@ -39,7 +39,7 @@ final class CharacterNotFoundView: UIView {
 
 extension CharacterNotFoundView: ViewSetup {
     func setupConstraints() {
-        rootStackView.fitToParent(with: .init(inset: Spacing.space1))
+        rootStackView.anchor(top: topAnchor, leading: leadingAnchor, trailing: trailingAnchor, padding: .init(inset: Spacing.space1))
         infoImage.size(80)
     }
     

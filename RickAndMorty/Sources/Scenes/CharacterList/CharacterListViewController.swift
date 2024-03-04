@@ -56,6 +56,7 @@ final class CharacterListViewController: UIViewController {
         tableView.keyboardDismissMode = .onDrag
         tableView.sectionHeaderHeight = .zero
         tableView.sectionFooterHeight = .zero
+        tableView.delaysContentTouches = false
         return tableView
     }()
     
@@ -156,7 +157,20 @@ extension CharacterListViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch CharacterListAdapter.Section(rawValue: indexPath.section) {
         case .characters:
-            viewModel.didSelectCharacter(at: indexPath.row)
+            guard let cell = tableView.cellForRow(at: indexPath) as? CharacterListCell else {
+                return
+            }
+
+            UIView.animate(withDuration: 0.2, animations: {
+                cell.transform = CGAffineTransform(scaleX: 0.95, y: 0.95)
+            }) { _ in
+                
+                UIView.animate(withDuration: 0.2) {
+                    cell.transform = .identity
+                } completion: { _ in
+                    self.viewModel.didSelectCharacter(at: indexPath.row)
+                }
+            }
 
         case .seeMore:
             let cell = tableView.cellForRow(at: indexPath) as? SeeMoreCell
@@ -174,7 +188,7 @@ extension CharacterListViewController: CharacterListViewProtocol {
     func displayCharacters(adapter: CharacterListAdapter) {
         tableView.dataSource = adapter
         
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+        view.animate { [unowned self] in
             self.errorContainer.isHidden = true
             self.tableView.reloadData()
         }
@@ -185,7 +199,7 @@ extension CharacterListViewController: CharacterListViewProtocol {
         notFoundView.isHidden = false
         notFoundView.setup(name: name)
         
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+        view.animate { [unowned self] in
             self.errorContainer.isHidden = false
         }
     }
@@ -194,7 +208,7 @@ extension CharacterListViewController: CharacterListViewProtocol {
         errorView.isHidden = false
         notFoundView.isHidden = true
         
-        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+        view.animate { [unowned self] in
             self.errorContainer.isHidden = false
         }
     }

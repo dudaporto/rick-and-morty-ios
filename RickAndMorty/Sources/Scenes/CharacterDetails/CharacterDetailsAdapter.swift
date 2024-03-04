@@ -42,6 +42,20 @@ final class CharacterDetailsAdapter: NSObject, UITableViewDataSource {
     }
 }
 
+extension CharacterDetailsAdapter: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        guard character != nil,
+              let section = CharacterDetailsAdapter.Section(rawValue: section) else { return nil }
+        
+        switch section {
+        case .about:
+            return TitleHeaderView(title: Strings.CharacterDetails.aboutSectionTitle)
+        case .episodes:
+            return TitleHeaderView(title: Strings.CharacterDetails.episodesSectionTitle)
+        }
+    }
+}
+
 private extension CharacterDetailsAdapter {
     func aboutCell(for row: Int) -> UITableViewCell {
         guard let character,

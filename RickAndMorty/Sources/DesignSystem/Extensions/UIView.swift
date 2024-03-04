@@ -33,4 +33,10 @@ extension UIView {
             addSubview(view)
         }
     }
+    
+    func animate(_ animations: @escaping (() -> Void)) {
+        UIView.transition(with: self, duration: 0.3, options: .transitionCrossDissolve) {
+            animations()
+        }
+    }
 }
