@@ -40,10 +40,11 @@ private final class Spy: CharacterListViewProtocol {
 
 final class CharacterListTests: XCTestCase {
     private let spy = Spy()
+    private let coordinatorSpy = CoordinatorSpy()
     private let useCaseStub = CharacterListUseCaseStub()
     
     private lazy var sut: CharacterListViewModel = {
-        let sut = CharacterListViewModel(useCase: useCaseStub)
+        let sut = CharacterListViewModel(useCase: useCaseStub, coordinator: coordinatorSpy)
         sut.view = spy
         return sut
     }()
@@ -106,5 +107,19 @@ final class CharacterListTests: XCTestCase {
         XCTAssertEqual(spy.calledAdapter?.characters, mock.characters)
         XCTAssertTrue(spy.calledAdapter?.showSeeMore == true)
         XCTAssertEqual(useCaseStub.calledPage, 2)
+    }
+    
+    func testDidSelectCharacter_ShouldCallCharacterDetailsEventWithRightId() throws {
+        let mock = try XCTUnwrap(CharacterListMock.data)
+        useCaseStub.mockResult = .success(mock)
+        sut.loadContent()
+        sut.didSelectCharacter(at: 0)
+        
+        switch coordinatorSpy.calledEvent {
+        case .characterDetails(let summary):
+            XCTAssertEqual(summary.id, "1")
+        default:
+            XCTFail("Wrong app event called.")
+        }
     }
 }
