@@ -3,6 +3,7 @@ import UIKit
 protocol CharacterListViewProtocol: AnyObject {
     func displayCharacters(adapter: CharacterListAdapter)
     func displaySearchError(name: String)
+    func displayServerError()
     func startLoading()
     func stopLoading()
 }
@@ -70,6 +71,19 @@ final class CharacterListViewController: UIViewController {
         return view
     }()
     
+    private lazy var errorView: ErrorView = {
+        let view = ErrorView(delegate: self)
+        view.isHidden = true
+        return view
+    }()
+    
+    private lazy var errorContainer: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [notFoundView, errorView])
+        stackView.axis = .vertical
+        stackView.isHidden = true
+        return stackView
+    }()
+    
     private let viewModel: CharacterListViewModelProtocol
     
     init(viewModel: CharacterListViewModelProtocol) {
@@ -83,6 +97,7 @@ final class CharacterListViewController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateHeader()
+        setupErrorContainer()
     }
     
     override func viewDidLoad() {
@@ -103,12 +118,13 @@ final class CharacterListViewController: UIViewController {
     
     private func updateHeader() {
         let width = tableView.frame.width
-        let height = headerView.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
-        headerView.frame.size.height = height
+        headerView.frame.size.height = headerView.systemLayoutSizeFitting(CGSize(width: width, height: 0)).height
         tableView.tableHeaderView = headerView
-        
-        let notFoundViewSpacing = height + view.safeAreaInsets.top
-        notFoundView.topAnchor.constraint(equalTo: tableView.topAnchor, constant: notFoundViewSpacing).isActive = true
+    }
+    
+    private func setupErrorContainer() {
+        let errorViewSpacing = headerView.frame.size.height + view.safeAreaInsets.top
+        errorContainer.topAnchor.constraint(equalTo: tableView.topAnchor, constant: errorViewSpacing).isActive = true
     }
 }
 
@@ -119,12 +135,15 @@ extension CharacterListViewController: ViewSetup {
         loadingView.fitToParent()
         headerStackView.fitToParent(with: Constants.Insets.header)
         
-        notFoundView.anchor(leading: tableView.leadingAnchor, trailing: tableView.trailingAnchor)
+        errorContainer.anchor(bottom: tableView.bottomAnchor,
+                              leading: tableView.leadingAnchor,
+                              trailing: tableView.trailingAnchor)
     }
     
     func setupHierarchy() {
         headerView.addSubview(headerStackView)
-        view.addSubviews(tableView, loadingView, notFoundView)
+        errorContainer.addSubviews(notFoundView, errorView)
+        view.addSubviews(tableView, loadingView, errorContainer)
     }
     
     func setupStyles() {
@@ -156,16 +175,27 @@ extension CharacterListViewController: CharacterListViewProtocol {
         tableView.dataSource = adapter
         
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
-            self.notFoundView.isHidden = true
+            self.errorContainer.isHidden = true
             self.tableView.reloadData()
         }
     }
     
     func displaySearchError(name: String) {
+        errorView.isHidden = true
+        notFoundView.isHidden = false
         notFoundView.setup(name: name)
         
         UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
-            self.notFoundView.isHidden = false
+            self.errorContainer.isHidden = false
+        }
+    }
+    
+    func displayServerError() {
+        errorView.isHidden = false
+        notFoundView.isHidden = true
+        
+        UIView.transition(with: self.view, duration: 0.3, options: .transitionCrossDissolve) {
+            self.errorContainer.isHidden = false
         }
     }
     
@@ -183,9 +213,7 @@ extension CharacterListViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let fieldText = (textField.text ?? "") as NSString
         let newText = fieldText.replacingCharacters(in: range, with: string).trimmingCharacters(in: .whitespaces)
-        if !newText.isEmpty {
-            viewModel.didSearch(newText)
-        }
+        viewModel.didSearch(newText)
         return true
     }
 
@@ -199,5 +227,12 @@ extension CharacterListViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
         return true
+    }
+}
+
+extension CharacterListViewController: ErrorViewDelegateProtocol {
+    func didTapTryAgain() {
+        searchField.text = ""
+        viewModel.loadContent()
     }
 }

@@ -5,7 +5,7 @@ protocol CharacterListUseCaseProtocol {
         page: Int,
         search: String,
         success: @escaping (CharacterListResponse) -> Void,
-        failure: @escaping () -> Void
+        failure: @escaping (CharacterListError) -> Void
     )
 }
 
@@ -20,7 +20,7 @@ final class CharacterListUseCase: CharacterListUseCaseProtocol {
         page: Int,
         search: String,
         success: @escaping (CharacterListResponse) -> Void,
-        failure: @escaping () -> Void
+        failure: @escaping (CharacterListError) -> Void
     ) {
         let query = CharacterListQuery(page: .some(page), search: .some(search))
         repository.fetch(query: query) { result in
@@ -29,11 +29,14 @@ final class CharacterListUseCase: CharacterListUseCaseProtocol {
                 guard let response = CharacterListResponse(data: graphQLResponse.characters) else {
                     fallthrough
                 }
-
-                success(response)
                 
+                if response.characters.isEmpty {
+                    failure(.search(name: search))
+                } else {
+                    success(response)
+                }
             case .failure:
-                failure()
+                failure(.server)
             }
         }
     }

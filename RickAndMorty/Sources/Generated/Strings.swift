@@ -44,6 +44,14 @@ internal enum Strings {
       }
     }
   }
+  internal enum Error {
+    /// Sorry, we had a system failure! Try again.
+    internal static let message = Strings.tr("Localizable", "error.message", fallback: "Sorry, we had a system failure! Try again.")
+    /// Oops! Something went wrong
+    internal static let title = Strings.tr("Localizable", "error.title", fallback: "Oops! Something went wrong")
+    /// Try again
+    internal static let tryAgain = Strings.tr("Localizable", "error.tryAgain", fallback: "Try again")
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

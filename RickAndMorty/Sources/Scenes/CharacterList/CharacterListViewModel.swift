@@ -35,8 +35,8 @@ private extension CharacterListViewModel {
             self.setupAdapter(response: response)
             self.setupViewResults()
             
-        } failure: {
-            print("Erro")
+        } failure: { [weak self] errorType in
+            self?.handleError(type: errorType)
         }
     }
     
@@ -56,9 +56,16 @@ private extension CharacterListViewModel {
     func setupViewResults() {
         view?.stopLoading()
         view?.displayCharacters(adapter: adapter)
+    }
+    
+    func handleError(type: CharacterListError) {
+        view?.stopLoading()
         
-        if adapter.characters.isEmpty && !search.isEmpty {
-            view?.displaySearchError(name: search)
+        switch type {
+        case .search(let name):
+            view?.displaySearchError(name: name)
+        case .server:
+            view?.displayServerError()
         }
     }
 }

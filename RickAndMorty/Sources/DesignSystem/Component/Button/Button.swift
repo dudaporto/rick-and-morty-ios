@@ -15,12 +15,6 @@ final class Button: UIButton {
         }
     }
     
-    var action: (() -> Void)? {
-        didSet {
-            addTarget(self, action: #selector(didTap), for: .touchUpInside)
-        }
-    }
-    
     var text: String? {
         didSet {
             setTitle(text, for: [])
@@ -62,9 +56,5 @@ private extension Button {
         border(color: Color.green1.color, width: 1, opacity: 1, radius: Radius.medium)
         setTitleColor(Color.green1.color, for: [])
         titleLabel?.font = Typography.highlightTertiaryTitle.font
-    }
-    
-    @objc func didTap() {
-        action?()
     }
 }

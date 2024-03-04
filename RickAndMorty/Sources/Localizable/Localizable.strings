@@ -1,3 +1,8 @@
+// MARK: - Error
+"error.title" = "Oops! Something went wrong";
+"error.message" = "Sorry, we had a system failure! Try again.";
+"error.tryAgain" = "Try again";
+
 // MARK: - Character List
 "characterList.title" = "Characters";
 "characterList.subtitle" = "Search for Rick & Morty character by name";
