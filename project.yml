@@ -20,9 +20,6 @@ targets:
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.rickandmorty
-    preBuildScripts:
-      - path: apollo-generate.sh
-        name: Apollo Generate
     dependencies:
     - package: Apollo
       product: Apollo

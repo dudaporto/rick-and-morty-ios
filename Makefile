@@ -1,2 +1,5 @@
 generate:
-	xcodegen && bash ./SwiftGen.sh && open RickAndMorty.xcodeproj
+	xcodegen
+	bash ./SwiftGen.sh
+	bash ./apollo-generate.sh
+	open RickAndMorty.xcodeproj
