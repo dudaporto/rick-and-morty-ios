@@ -60,7 +60,7 @@ Natively implemented features:
 - Support for light and dark mode
 
 
-## Screens
+## Preview
 
 
 <table>
