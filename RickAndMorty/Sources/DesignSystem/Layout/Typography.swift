@@ -1,10 +1,5 @@
 import UIKit
 
-fileprivate enum FontName {
-    static let bold = "SF Pro Display Bold"
-    static let regular = "SF Pro Display Regular"
-}
-
 enum Typography {
     /// Bold 34
     case largeTitle
@@ -25,19 +20,19 @@ enum Typography {
         let font: UIFont?
         switch self {
         case .largeTitle:
-            font = UIFont(name: FontName.bold, size: 34)
+            font = UIFont.systemFont(ofSize: 34, weight: .bold)
         case .highlightTitle:
-            font = UIFont(name: FontName.bold, size: 22)
+            font = UIFont.systemFont(ofSize: 22, weight: .bold)
         case .highlightSecondaryTitle:
-            font = UIFont(name: FontName.bold, size: 18)
+            font = UIFont.systemFont(ofSize: 18, weight: .bold)
         case .highlightTertiaryTitle:
-            font = UIFont(name: FontName.bold, size: 14)
+            font = UIFont.systemFont(ofSize: 14, weight: .bold)
         case .title:
-            font = UIFont(name: FontName.regular, size: 18)
+            font = UIFont.systemFont(ofSize: 18, weight: .regular)
         case .subtitle:
-            font = UIFont(name: FontName.regular, size: 16)
+            font = UIFont.systemFont(ofSize: 16, weight: .regular)
         case .caption:
-            font = UIFont(name: FontName.regular, size: 14)
+            font = UIFont.systemFont(ofSize: 14, weight: .regular)
         }
         return font
     }
