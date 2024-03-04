@@ -97,8 +97,10 @@ final class CharacterListViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateHeader()
-        setupErrorContainer()
+        if tableView.tableHeaderView == nil {
+            updateHeader()
+            setupErrorContainer()
+        }
     }
     
     override func viewDidLoad() {
@@ -115,6 +117,7 @@ final class CharacterListViewController: UIViewController {
     
     private func setupNavigationBar() {
         navigationController?.navigationBar.prefersLargeTitles = true
+        navigationController?.navigationBar.tintColor = Color.green1.color
     }
     
     private func updateHeader() {

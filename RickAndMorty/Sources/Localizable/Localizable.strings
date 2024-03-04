@@ -1,3 +1,12 @@
+// MARK: - HOME
+"home.title" = "Welcome!";
+"home.appDescription" = "In this app you will have access to about hundreds of characters, images, locations and episodes about the TV show Rick and Morty.";
+"home.developed" = "Developed by @dudaporto";
+"home.developedBoldFragment" = "@dudaporto";
+"home.powered" = "Powered by rickandmortyapi.com";
+"home.poweredBoldFragment" = "rickandmortyapi.com";
+"home.charactersButtonTitle" = "See characters";
+
 // MARK: - Error
 "error.title" = "Oops! Something went wrong";
 "error.message" = "Sorry, we had a system failure! Try again.";

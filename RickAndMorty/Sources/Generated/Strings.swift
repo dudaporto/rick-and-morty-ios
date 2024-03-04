@@ -52,6 +52,22 @@ internal enum Strings {
     /// Try again
     internal static let tryAgain = Strings.tr("Localizable", "error.tryAgain", fallback: "Try again")
   }
+  internal enum Home {
+    /// In this app you will have access to about hundreds of characters, images, locations and episodes about the TV show Rick and Morty.
+    internal static let appDescription = Strings.tr("Localizable", "home.appDescription", fallback: "In this app you will have access to about hundreds of characters, images, locations and episodes about the TV show Rick and Morty.")
+    /// See characters
+    internal static let charactersButtonTitle = Strings.tr("Localizable", "home.charactersButtonTitle", fallback: "See characters")
+    /// Developed by @dudaporto
+    internal static let developed = Strings.tr("Localizable", "home.developed", fallback: "Developed by @dudaporto")
+    /// @dudaporto
+    internal static let developedBoldFragment = Strings.tr("Localizable", "home.developedBoldFragment", fallback: "@dudaporto")
+    /// Powered by rickandmortyapi.com
+    internal static let powered = Strings.tr("Localizable", "home.powered", fallback: "Powered by rickandmortyapi.com")
+    /// rickandmortyapi.com
+    internal static let poweredBoldFragment = Strings.tr("Localizable", "home.poweredBoldFragment", fallback: "rickandmortyapi.com")
+    /// Welcome!
+    internal static let title = Strings.tr("Localizable", "home.title", fallback: "Welcome!")
+  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

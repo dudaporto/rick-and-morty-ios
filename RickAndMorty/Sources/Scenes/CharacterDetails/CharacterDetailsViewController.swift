@@ -17,7 +17,7 @@ final class CharacterDetailsViewController: UIViewController {
         return image
     }()
     
-    private lazy var characterTitle = UILabel.build(type: .largeTitle, color: Color.gray4.color)
+    private lazy var characterTitle = UILabel.build(type: .largeTitle, color: Color.gray4.color, numberOfLines: 1)
     
     private lazy var statusIndicator: UIView = {
         let view = UIView()
@@ -55,6 +55,7 @@ final class CharacterDetailsViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.sectionFooterHeight = .zero
         tableView.backgroundColor = .clear
+        
         return tableView
     }()
     
@@ -132,7 +133,7 @@ extension CharacterDetailsViewController: ViewSetup {
         headerStackView.anchor(top: characterInfoContainer.topAnchor,
                                leading: characterInfoContainer.leadingAnchor,
                                trailing: characterInfoContainer.trailingAnchor,
-                               padding: .init(inset: Spacing.space3))
+                               padding: .init(top: Spacing.space3, left: Spacing.space3, bottom: 0, right: Spacing.space3))
         
         gradientView.anchor(top: view.topAnchor,
                             leading: view.leadingAnchor,
@@ -144,7 +145,7 @@ extension CharacterDetailsViewController: ViewSetup {
                              bottom: characterInfoContainer.bottomAnchor,
                              leading: characterInfoContainer.leadingAnchor,
                              trailing: characterInfoContainer.trailingAnchor,
-                             padding: .init(vertical: Spacing.space2))
+                             padding: .init(paddingBottom: Spacing.space2))
         
         errorView.anchor(top: headerStackView.bottomAnchor,
                          bottom: characterInfoContainer.bottomAnchor,
@@ -167,6 +168,7 @@ extension CharacterDetailsViewController: ViewSetup {
     
     func setupStyles() {
         navigationController?.navigationBar.tintColor = .white
+        characterTitle.adjustsFontSizeToFitWidth = true
     }
 }
 

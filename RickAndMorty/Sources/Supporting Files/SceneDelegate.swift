@@ -11,7 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         let navigation = UINavigationController()
         let coordinator = Coordinator(navigationController: navigation)
-        let viewController = CharacterListFactory.build(coordinator: coordinator)
+        let viewController = HomeViewController(coordinator: coordinator)
         
         navigation.pushViewController(viewController, animated: false)
         
